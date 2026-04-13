@@ -22,9 +22,11 @@ if (!API_KEY) {
 
 // Fallback models — if one is rate-limited (429/503), try the next
 const MODELS = [
+  'gemini-1.5-flash',
+  'gemini-1.5-flash-8b',
   'gemini-2.0-flash-lite',
   'gemini-2.0-flash',
-  'gemini-2.5-flash',
+  'gemini-2.5-flash'
 ];
 
 function callGemini(modelName, data) {
