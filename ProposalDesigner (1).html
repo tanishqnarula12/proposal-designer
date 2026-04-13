@@ -1027,19 +1027,26 @@ function openNext(){
   full += "}";
   full += "<\/script><\/body><\/html>";
 
-  var newTab = window.open("", "_blank");
-  if(newTab){
-    newTab.document.open();
-    newTab.document.write(full);
-    newTab.document.close();
-  } else {
+  var cn = clientName();
+  if (window.location.protocol === "file:") {
     var blob = new Blob([full], {type:"text/html;charset=utf-8"});
-    var a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = buildProposalTitle(cn).replace(/ /g,"_") + ".html";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    var url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+  } else {
+    var newTab = window.open("", "_blank");
+    if(newTab){
+      newTab.document.open();
+      newTab.document.write(full);
+      newTab.document.close();
+    } else {
+      var blob = new Blob([full], {type:"text/html;charset=utf-8"});
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = buildProposalTitle(cn).replace(/ /g,"_") + ".html";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
   }
 }
 
@@ -1058,23 +1065,35 @@ async function processPDF(file){
   document.getElementById("pdfBtnLbl").style.display = "none";
   try {
     var base64 = await new Promise(function(res,rej){ var r=new FileReader(); r.onload=function(){res(r.result.split(",")[1]);}; r.onerror=rej; r.readAsDataURL(file); });
-    var response = await fetch("https://api.anthropic.com/v1/messages",{
-      method:"POST", headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:[
-        {type:"document",source:{type:"base64",media_type:"application/pdf",data:base64}},
-        {type:"text",text:"Extract investment proposal data. Return ONLY valid JSON no markdown: {clientName,proposalTypes:[],sections:{}}. Fields: sip(category,scheme,date,amount), sipchanges(category,scheme,date,currentSip,proposedSip,totalSip), redemption(category,scheme,amount,capitalGain,taxLiability), lumpsum(category,scheme,amount), stp(category,fromScheme,toScheme,amount,duration), swp(category,scheme,date,amount). Amounts as numeric strings."}
-      ]}]})
+    var apiBase = (window.location.protocol === "file:") ? "http://localhost:3000" : window.location.origin;
+    var response = await fetch(apiBase + "/api/gemini",{
+      method:"POST", 
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({
+        contents: [{
+          parts: [
+            {inlineData: {mimeType: "application/pdf", data: base64}},
+            {text: "Extract investment proposal data. Return ONLY valid JSON no markdown: {clientName,proposalTypes:[],sections:{}}. Valid proposalTypes: sip, sipchanges, redemption, lumpsum, stp, swp, switch. Fields for each: sip(category,scheme,date,amount), sipchanges(category,scheme,date,currentSip,proposedSip,totalSip), redemption(category,scheme,amount,shortTerm,longTerm,taxLiability), lumpsum(category,scheme,amount), stp(fromCategory,fromScheme,fromAmount,toCategory,toScheme,toAmount), swp(category,scheme,date,amount), switch(fromCategory,fromScheme,toCategory,toScheme,toAmount). Amounts as numeric strings."}
+          ]
+        }],
+        generationConfig: {responseMimeType: "application/json"}
+      })
     });
     var data = await response.json();
-    var raw = data.content.map(function(c){return c.text||"";}).join("").trim();
+    if(data.error) throw new Error(data.error.message);
+    if(!data.candidates || data.candidates.length === 0) throw new Error("No response from AI.");
+    var raw = data.candidates[0].content.parts[0].text;
     var parsed = JSON.parse(raw.replace(/```json|```/g,"").trim());
     if(parsed.clientName) document.getElementById("clientName").value = parsed.clientName;
     if(parsed.proposalTypes && parsed.proposalTypes.length){
-      S.selTypes = parsed.proposalTypes;
-      S.activeTab = parsed.proposalTypes[0];
-      var ns = {};
-      parsed.proposalTypes.forEach(function(t){ ns[t] = (parsed.sections&&parsed.sections[t]&&parsed.sections[t].length) ? parsed.sections[t] : [newRow(t)]; });
-      S.sections = ns;
+      var validTypes = parsed.proposalTypes.filter(function(t){ return KEYS[t]; });
+      if(validTypes.length > 0) {
+        S.selTypes = validTypes;
+        S.activeTab = validTypes[0];
+        var ns = {};
+        validTypes.forEach(function(t){ ns[t] = (parsed.sections&&parsed.sections[t]&&parsed.sections[t].length) ? parsed.sections[t] : [newRow(t)]; });
+        S.sections = ns;
+      }
     }
     renderAll();
     document.getElementById("pdfIcon").textContent = "✅";
@@ -1088,7 +1107,8 @@ async function processPDF(file){
       document.getElementById("pdfBtnLbl").textContent = "Browse PDF";
     }, 5000);
   } catch(err){
-    console.error(err);
+    console.error("PDF Processing Error:", err);
+    alert("Error processing PDF: " + err.message);
     document.getElementById("pdfIcon").textContent = "❌";
     document.getElementById("pdfTitle").textContent = "Could not read PDF. Try again.";
     document.getElementById("pdfProgress").style.display = "none";
