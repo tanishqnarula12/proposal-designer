@@ -1023,7 +1023,7 @@ function openNext(){
   full += "    ws['!cols']=sec.cols.map(function(c){return {wch:Math.max((c||'').length+4,22)};});";
   full += "    XLSX.utils.book_append_sheet(wb,ws,sec.sheetName.substring(0,31));";
   full += "  });";
-  full += "  XLSX.writeFile(wb,buildProposalTitle(clientN).replace(/ /g,'_')+'.xlsx');";
+  full += "  XLSX.writeFile(wb, document.title.replace(/ /g,'_')+'.xlsx');";
   full += "}";
   full += "<\/script><\/body><\/html>";
 
@@ -1119,53 +1119,4 @@ async function processPDF(file){
 renderAll();
 </script>
 </body>
-</html
-
-function downloadExcel(){
-  if(typeof XLSX==='undefined'){alert('Excel library not loaded.');return;}
-  var wb=XLSX.utils.book_new();
-  var clientN=document.title.replace('Proposal - ','');
-  var dateStr=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
-  var allSections=window._proposalData||[];
-  allSections.forEach(function(sec){
-    var ws_data=[];
-    ws_data.push(['Client Name:',clientN,'','Date:',dateStr]);
-    ws_data.push(['Proposal Type:',sec.label]);
-    ws_data.push([]);
-    ws_data.push(sec.cols);
-    sec.rows.forEach(function(r){ws_data.push(r);});
-    if(sec.totalRow)ws_data.push(sec.totalRow);
-    ws_data.push([]);
-    if(sec.extras){sec.extras.forEach(function(e){ws_data.push(e);});}
-    var ws=XLSX.utils.aoa_to_sheet(ws_data);
-    var colW=sec.cols.map(function(c){return {wch:Math.max((c||'').length+4,20)};});
-    ws['!cols']=colW;
-    XLSX.utils.book_append_sheet(wb,ws,sec.sheetName.substring(0,31));
-  });
-  XLSX.writeFile(wb,buildProposalTitle(clientN).replace(/ /g,'_')+'.xlsx');
-}
-
-function fmtN(v){var n=parseFloat((v||'0').toString().replace(/,/g,''));return isNaN(n)?0:n;}
-function downloadExcel(){
-  if(typeof XLSX==='undefined'){alert('Excel library not loaded. Check internet.');return;}
-  var wb=XLSX.utils.book_new();
-  var clientN=document.title.replace('Proposal - ','');
-  var dateStr=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
-  var allSections=window._proposalData||[];
-  allSections.forEach(function(sec){
-    var aoa=[];
-    aoa.push(['Client Name:',clientN,'','Date:',dateStr]);
-    aoa.push(['Proposal Type:',sec.label]);
-    aoa.push([]);
-    aoa.push(sec.cols);
-    sec.rows.forEach(function(r){aoa.push(r);});
-    if(sec.totalRow)aoa.push(sec.totalRow);
-    aoa.push([]);
-    if(sec.extras){sec.extras.forEach(function(e){aoa.push(e);});}
-    var ws=XLSX.utils.aoa_to_sheet(aoa);
-    var colW=sec.cols.map(function(c){return {wch:Math.max((c||'').length+4,20)};});
-    ws['!cols']=colW;
-    XLSX.utils.book_append_sheet(wb,ws,sec.sheetName.substring(0,31));
-  });
-  XLSX.writeFile(wb,buildProposalTitle(clientN).replace(/ /g,'_')+'.xlsx');
-}>
+</html>
