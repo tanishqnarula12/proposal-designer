@@ -73,7 +73,7 @@ tbody td{padding:7px 5px;}
 .prev-th{background:#0d2b5e;color:#fff;padding:13px 16px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;text-align:left;font-weight:600;}
 .prev-td{padding:12px 16px;font-size:13px;color:#334155;border-bottom:1px solid #bfdbfe;}
 .prev-td-sno{padding:12px 16px;font-size:13px;color:#1a4a9c;font-weight:700;border-bottom:1px solid #bfdbfe;}
-.prev-tot-lbl{background:#0047AB;color:#fff;padding:10px 16px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-align:right;}
+.prev-tot-lbl{background:#0047AB;color:#fff;padding:10px 24px 10px 16px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-align:right;}
 .prev-tot-val{background:#0047AB;color:#fff;padding:10px 16px;font-size:13px;font-weight:700;}
 .prev-remarks{margin-top:16px;padding:14px 18px;background:#f8fafc;border:1px solid #bfdbfe;border-radius:8px;}
 .prev-remarks-lbl{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#1a4a9c;margin-bottom:6px;}
@@ -123,6 +123,7 @@ tbody td{padding:7px 5px;}
       <table>
         <thead id="tHead"></thead>
         <tbody id="tBody"></tbody>
+        <tfoot id="tFoot"></tfoot>
       </table>
     </div>
     <button class="add-row-btn" onclick="addRow()"><span style="font-size:18px;line-height:1">+</span> Add Row</button>
@@ -298,6 +299,8 @@ function renderTable(){
 
   var body = document.getElementById("tBody");
   body.innerHTML = "";
+  var foot = document.getElementById("tFoot");
+  if(foot) foot.innerHTML = "";
 
   rows.forEach(function(row, i){
     var tr = document.createElement("tr");
@@ -521,14 +524,17 @@ function renderRedemptionExtras(){
   }
 
   var html = "";
-  // Totals row
-  html += "<table style='width:100%;border-collapse:collapse;margin-top:0;'><tbody>";
-  html += "<tr><td colspan='3' style='background:#0047AB;color:#fff;padding:10px 12px;font-size:11px;font-weight:700;text-transform:uppercase;text-align:right;'>TOTAL</td>";
-  html += "<td style='background:#0047AB;color:#fff;padding:10px 12px;font-size:13px;font-weight:700;'>"+fmtINR(String(totalAmt))+"</td>";
-  html += "<td style='background:#0047AB;padding:10px 12px;'></td>";
-  html += "<td style='background:#0047AB;padding:10px 12px;'></td>";
-  html += "<td style='background:#0047AB;padding:10px 12px;'></td></tr>";
-  html += "</tbody></table>";
+  
+  // Totals row appended to main table tFoot
+  var tFoot = document.getElementById("tFoot");
+  if(tFoot){
+    var tfHtml = "<tr><td colspan='3' style='background:#0047AB;color:#fff;padding:10px 24px 10px 12px;font-size:11px;font-weight:700;text-transform:uppercase;text-align:right;'>TOTAL</td>";
+    tfHtml += "<td style='background:#0047AB;color:#fff;padding:10px 12px;font-size:13px;font-weight:700;'>"+fmtINR(String(totalAmt))+"</td>";
+    tfHtml += "<td style='background:#0047AB;color:#fff;padding:10px 12px;font-size:13px;font-weight:700;'>"+fmtINR(String(totalST))+"</td>";
+    tfHtml += "<td style='background:#0047AB;color:#fff;padding:10px 12px;font-size:13px;font-weight:700;'>"+fmtINR(String(totalLT))+"</td>";
+    tfHtml += "<td style='background:#0047AB;padding:10px 12px;'></td><td style='background:#0047AB;padding:10px 12px;'></td></tr>";
+    tFoot.innerHTML = tfHtml;
+  }
 
   html += netInfo;
 
@@ -699,7 +705,7 @@ function buildRedemptionPreview(){
   h += "<div class='sec-block'><div class='sec-title'>Redemption Proposal</div>";
   h += "<table class='prev-table'><thead><tr><th class='prev-th'>S.No</th><th class='prev-th'>Category</th><th class='prev-th'>Scheme Name</th><th class='prev-th'>Amount (Rs)</th><th class='prev-th'>Short Term (Rs)</th><th class='prev-th'>Long Term (Rs)</th><th class='prev-th'>Tax Liability</th></tr></thead><tbody>";
   h += rowsHTML;
-  var totalAmt=r.reduce(function(s,row){return s+pNum(row.amount);},0);h += "<tr><td colspan='3' class='prev-tot-lbl'>TOTAL</td><td class='prev-tot-val'>"+fmtINR(String(totalAmt))+"</td><td class='prev-tot-val'></td><td class='prev-tot-val'></td><td class='prev-tot-val'></td></tr>";
+  var totalAmt=r.reduce(function(s,row){return s+pNum(row.amount);},0);h += "<tr><td colspan='3' class='prev-tot-lbl'>TOTAL</td><td class='prev-tot-val'>"+fmtINR(String(totalAmt))+"</td><td class='prev-tot-val'>"+fmtINR(String(totalST))+"</td><td class='prev-tot-val'>"+fmtINR(String(totalLT))+"</td><td class='prev-tot-val'></td></tr>";
   h += "</tbody></table>";
 
   // Exemption info
@@ -827,7 +833,9 @@ function openNext(){
         excelRows.push([row.category||"", row.scheme||"", pNum(row.amount)||"", pNum(row.shortTerm)||"", pNum(row.longTerm)||"", taxDisp]);
       });
       var totalAmt = rows.reduce(function(s,r){return s+pNum(r.amount);},0);
-      var totalRow = ["","","TOTAL", totalAmt, "", ""];
+      var totalST = rows.reduce(function(s,r){return s+pNum(r.shortTerm);},0);
+      var totalLT = rows.reduce(function(s,r){return s+pNum(r.longTerm);},0);
+      var totalRow = ["","","TOTAL", totalAmt, totalST, totalLT, ""];
       extras.push(["Exemption:", rs.includeExemption ? "Included (Rs 1,25,000)" : "Excluded"]);
       if(rs.booked) extras.push(["Booked Capital Gain:", pNum(S.redemptionBookedGain)]);
       extras.push(["Equity Tax Liability:", calc.equityTax]);
@@ -951,7 +959,7 @@ function openNext(){
     h += "<table style='width:100%;border-collapse:collapse;'><thead><tr>";
     ["S.No","Category","Scheme Name","Amount (Rs)","Short Term (Rs)","Long Term (Rs)","Tax Liability"].forEach(function(col){h+="<th style='"+thS+"'>"+col+"</th>";});
     h += "</tr></thead><tbody>"+rowsHTML;
-    h += "<tr><td colspan='3' style='background:#0047AB;color:#fff;padding:9px 12px;font-size:10px;font-weight:700;text-transform:uppercase;text-align:right;'>TOTAL</td><td style='background:#0047AB;color:#fff;padding:9px 12px;font-size:12px;font-weight:700;'>"+fmtINRhtml(String(totalAmt2))+"</td><td style='background:#0047AB;padding:9px 12px;'></td><td style='background:#0047AB;padding:9px 12px;'></td><td style='background:#0047AB;padding:9px 12px;'></td></tr>";
+    h += "<tr><td colspan='3' style='background:#0047AB;color:#fff;padding:9px 24px 9px 12px;font-size:10px;font-weight:700;text-transform:uppercase;text-align:right;'>TOTAL</td><td style='background:#0047AB;color:#fff;padding:9px 12px;font-size:12px;font-weight:700;'>"+fmtINRhtml(String(totalAmt2))+"</td><td style='background:#0047AB;color:#fff;padding:9px 12px;font-size:12px;font-weight:700;'>"+fmtINRhtml(String(totalST))+"</td><td style='background:#0047AB;color:#fff;padding:9px 12px;font-size:12px;font-weight:700;'>"+fmtINRhtml(String(totalLT))+"</td><td style='background:#0047AB;padding:9px 12px;'></td></tr>";
     h += "</tbody></table>";
     h += "<div style='margin-top:10px;padding:8px 12px;background:#eff6ff;border-left:3px solid #1a4a9c;border-radius:4px;font-size:11.5px;color:#1a4a9c;'>";
     h += rs.includeExemption ? "&#10003; &#8377;1.25 Lakh Exemption Included"+(rs.booked>0?" &nbsp;|&nbsp; Booked Capital Gain: "+fmtINRhtml(String(rs.booked)):"") : "&#10007; &#8377;1.25 Lakh Exemption Excluded";
