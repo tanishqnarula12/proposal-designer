@@ -291,7 +291,6 @@ function renderTable(){
       extDiv.style.marginTop = "0";
       document.querySelector(".table-wrap").after(extDiv);
     }
-    setTimeout(function(){ renderRedemptionExtras(); }, 50);
   } else {
     if(addRowBtn) addRowBtn.style.display = "flex";
     if(existingExtras) existingExtras.innerHTML = "";
@@ -359,6 +358,10 @@ function renderTable(){
     tdX.appendChild(btnX); tr.appendChild(tdX);
     body.appendChild(tr);
   });
+
+  if(type === "redemption"){
+    renderRedemptionExtras();
+  }
 }
 
 function renderRemarks(){
@@ -421,8 +424,6 @@ function addRow(){
   renderTable();
   if(document.getElementById("preview-container").style.display==="block") renderPreview();
 }
-
-function pNum(v){ var n=parseFloat((v||"0").replace(/,/g,"")); return isNaN(n)?0:n; }
 
 function calcAllRedemptionTaxes(){
   var rows = S.sections["redemption"] || [];
@@ -505,8 +506,6 @@ function getRedemptionState(){
 }
 
 function renderRedemptionExtras(){
-  var extra = document.getElementById("redemptionExtras");
-  if(!extra) return;
   var rows = S.sections["redemption"] || [];
   var rs = getRedemptionState();
   var calc = calcAllRedemptionTaxes();
@@ -523,19 +522,29 @@ function renderRedemptionExtras(){
     netInfo = "<div style='margin-top:8px;padding:8px 12px;background:#fefce8;border-left:3px solid #f59e0b;border-radius:4px;font-size:12px;color:#92400e;'>Short Term Loss of "+fmtINR(String(Math.abs(calc.netEquityST)))+" adjusted against Long Term Gain. Net LT = "+fmtINR(String(calc.adjustedLT))+"</div>";
   }
 
-  var html = "";
-  
-  // Totals row appended to main table tFoot
+  // Totals row: always sync tFoot first (must not depend on redemptionExtras existing — that caused missing ST/LT totals on some hosts)
   var tFoot = document.getElementById("tFoot");
   if(tFoot){
     var tfHtml = "<tr><td colspan='3' style='background:#0047AB;color:#fff;padding:10px 24px 10px 12px;font-size:11px;font-weight:700;text-transform:uppercase;text-align:right;'>TOTAL</td>";
-    tfHtml += "<td style='background:#0047AB;color:#fff;padding:10px 12px;font-size:13px;font-weight:700;'>"+fmtINR(String(totalAmt))+"</td>";
-    tfHtml += "<td style='background:#0047AB;color:#fff;padding:10px 12px;font-size:13px;font-weight:700;'>"+fmtINR(String(totalST))+"</td>";
-    tfHtml += "<td style='background:#0047AB;color:#fff;padding:10px 12px;font-size:13px;font-weight:700;'>"+fmtINR(String(totalLT))+"</td>";
+    tfHtml += "<td style='background:#0047AB;color:#fff;padding:10px 12px;font-size:13px;font-weight:700;white-space:nowrap;'>"+fmtINR(String(totalAmt))+"</td>";
+    tfHtml += "<td style='background:#0047AB;color:#fff;padding:10px 12px;font-size:13px;font-weight:700;white-space:nowrap;'>"+fmtINR(String(totalST))+"</td>";
+    tfHtml += "<td style='background:#0047AB;color:#fff;padding:10px 12px;font-size:13px;font-weight:700;white-space:nowrap;'>"+fmtINR(String(totalLT))+"</td>";
     tfHtml += "<td style='background:#0047AB;padding:10px 12px;'></td><td style='background:#0047AB;padding:10px 12px;'></td></tr>";
     tFoot.innerHTML = tfHtml;
   }
 
+  var extra = document.getElementById("redemptionExtras");
+  if(!extra){
+    var extDiv = document.createElement("div");
+    extDiv.id = "redemptionExtras";
+    extDiv.style.marginTop = "0";
+    var tw = document.querySelector(".table-wrap");
+    if(tw) tw.after(extDiv);
+    extra = extDiv;
+  }
+  if(!extra) return;
+
+  var html = "";
   html += netInfo;
 
   // Add Row button
