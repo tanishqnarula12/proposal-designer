@@ -835,7 +835,7 @@ function openNext(){
       var totalAmt = rows.reduce(function(s,r){return s+pNum(r.amount);},0);
       var totalST = rows.reduce(function(s,r){return s+pNum(r.shortTerm);},0);
       var totalLT = rows.reduce(function(s,r){return s+pNum(r.longTerm);},0);
-      var totalRow = ["","","TOTAL", totalAmt, totalST, totalLT, ""];
+      var totalRow = ["", "TOTAL", totalAmt, totalST, totalLT, ""];
       extras.push(["Exemption:", rs.includeExemption ? "Included (Rs 1,25,000)" : "Excluded"]);
       if(rs.booked) extras.push(["Booked Capital Gain:", pNum(S.redemptionBookedGain)]);
       extras.push(["Equity Tax Liability:", calc.equityTax]);
@@ -861,7 +861,7 @@ function openNext(){
           for(var si=2;si<keys.length;si++) tr2.push("");
           sp2.cols.forEach(function(key,ci){
             var ki=keys.indexOf(key);
-            if(ki>=0) tr2[ki+1]=calcTotal(type,key);
+            if(ki>=0) tr2[ki]=calcTotal(type,key);
           });
           totalRow=tr2;
         } else {
