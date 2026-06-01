@@ -4274,7 +4274,7 @@ function renderRedemptionExtras(){
   } else {
     debtDisplay = "<span style='font-size:20px;font-weight:700;color:var(--dark);'>&#8377;0</span>";
   }
-  var debtSTText = hasDebtST ? "As Per Tax Slab" : "&#8377;0";
+  var debtSTText = hasDebtST ? "Will be Added to your Income in short term" : "&#8377;0";
   html += "<div style='flex:1;padding:14px 20px;'>";
   html += "  <div style='font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;white-space:nowrap;'>Debt Tax Liability</div>";
   html += "  <div>"+debtDisplay+"</div>";
@@ -4419,7 +4419,7 @@ function updateRedemptionSummary(){
   } else {
     debtDisplay = "<span style='font-size:20px;font-weight:700;color:var(--dark);'>&#8377;0</span>";
   }
-  var debtSTText = hasDebtST ? "As Per Tax Slab" : "&#8377;0";
+  var debtSTText = hasDebtST ? "Will be Added to your Income in short term" : "&#8377;0";
 
   summaryEl.innerHTML =
     "<div style='flex:1;padding:14px 20px;border-right:1px solid var(--border);'>" +
@@ -4617,7 +4617,7 @@ function buildRedemptionPreview(){
   } else {
     prevDebtDisp = "&#8377;0";
   }
-  var prevDebtSTText = hasDebtST ? "As Per Tax Slab" : "&#8377;0";
+  var prevDebtSTText = hasDebtST ? "Will be Added to your Income in short term" : "&#8377;0";
 
   h += "<div style='flex:1;padding:16px 24px;background:#1a4a9c;border-radius:8px;color:#fff;'>";
   h += "  <div style='font-size:11px;letter-spacing:1.5px;text-transform:uppercase;opacity:0.8;margin-bottom:8px;font-weight:700;'>Debt Tax Liability</div>";
@@ -4933,7 +4933,7 @@ function openNext(){
     } else {
       secDebtDisp = "&#8377;0";
     }
-    var secDebtSTText = hasDebtST ? "As Per Tax Slab" : "&#8377;0";
+    var secDebtSTText = hasDebtST ? "Will be Added to your Income in short term" : "&#8377;0";
 
     h += "<div style='flex:1;padding:16px 24px;background:#1a4a9c;border-radius:8px;color:#fff;'>";
     h += "  <div style='font-size:11px;letter-spacing:1.5px;text-transform:uppercase;opacity:0.8;margin-bottom:8px;font-weight:700;'>Debt Tax Liability</div>";
