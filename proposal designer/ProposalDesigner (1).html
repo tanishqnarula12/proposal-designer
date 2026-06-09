@@ -4261,16 +4261,16 @@ function renderRedemptionExtras(){
   html += "<div id='redemptionSummary' style='display:flex;gap:0;text-transform:none;'>";
   html += "<div style='flex:1;padding:14px 20px;border-right:1px solid var(--border);'>";
   html += "  <div style='font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;white-space:nowrap;'>Equity Tax Liability</div>";
-  html += "  <div style='font-size:20px;font-weight:700;color:var(--dark);'>&#8377;"+(equityTax).toLocaleString('en-IN')+"</div>";
-  html += "  <div style='font-size:11px;color:var(--muted);margin-top:6px;font-weight:500;line-height:1.4;'>Short Term Tax Liability: &#8377;"+calc.equitySTTax.toLocaleString('en-IN')+"<br>Long Term Tax Liability: &#8377;"+calc.equityLTTax.toLocaleString('en-IN')+"</div>";
+  html += "  <div style='font-size:20px;font-weight:700;color:var(--dark);'>&#8377;"+Math.round(equityTax).toLocaleString('en-IN')+"</div>";
+  html += "  <div style='font-size:11px;color:var(--muted);margin-top:6px;font-weight:500;line-height:1.4;'>Short Term Tax Liability: &#8377;"+Math.round(calc.equitySTTax).toLocaleString('en-IN')+"<br>Long Term Tax Liability: &#8377;"+Math.round(calc.equityLTTax).toLocaleString('en-IN')+"</div>";
   html += "</div>";
   var debtDisplay = "";
   if(hasDebtST && debtTax > 0){
-    debtDisplay = "<span style='font-size:13px;color:#92400e;background:#fefce8;border:1px solid #fde68a;padding:4px 10px;border-radius:6px;display:inline-block;text-transform:none;font-weight:600;'>As Per Tax Slab</span><br><span style='font-size:20px;font-weight:700;color:var(--dark);'>&#8377;"+debtTax.toLocaleString('en-IN')+"</span>";
+    debtDisplay = "<span style='font-size:13px;color:#92400e;background:#fefce8;border:1px solid #fde68a;padding:4px 10px;border-radius:6px;display:inline-block;text-transform:none;font-weight:600;'>As Per Tax Slab</span><br><span style='font-size:20px;font-weight:700;color:var(--dark);'>&#8377;"+Math.round(debtTax).toLocaleString('en-IN')+"</span>";
   } else if(hasDebtST && debtTax === 0){
     debtDisplay = "<span style='font-size:13px;color:#92400e;background:#fefce8;border:1px solid #fde68a;padding:4px 10px;border-radius:6px;display:inline-block;text-transform:none;font-weight:600;'>As Per Tax Slab</span>";
   } else if(!hasDebtST && debtTax > 0){
-    debtDisplay = "<span style='font-size:20px;font-weight:700;color:var(--dark);'>&#8377;"+debtTax.toLocaleString('en-IN')+"</span>";
+    debtDisplay = "<span style='font-size:20px;font-weight:700;color:var(--dark);'>&#8377;"+Math.round(debtTax).toLocaleString('en-IN')+"</span>";
   } else {
     debtDisplay = "<span style='font-size:20px;font-weight:700;color:var(--dark);'>&#8377;0</span>";
   }
@@ -4278,7 +4278,7 @@ function renderRedemptionExtras(){
   html += "<div style='flex:1;padding:14px 20px;'>";
   html += "  <div style='font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;white-space:nowrap;'>Debt Tax Liability</div>";
   html += "  <div>"+debtDisplay+"</div>";
-  html += "  <div style='font-size:11px;color:var(--muted);margin-top:6px;font-weight:500;line-height:1.4;'>Short Term Tax Liability: "+debtSTText+"<br>Long Term Tax Liability: &#8377;"+debtTax.toLocaleString('en-IN')+"</div>";
+  html += "  <div style='font-size:11px;color:var(--muted);margin-top:6px;font-weight:500;line-height:1.4;'>Short Term Tax Liability: "+debtSTText+"<br>Long Term Tax Liability: &#8377;"+Math.round(debtTax).toLocaleString('en-IN')+"</div>";
   html += "</div>";
   html += "</div></div>";
 
@@ -4411,11 +4411,11 @@ function updateRedemptionSummary(){
   
   var debtDisplay = "";
   if(hasDebtST && debtTax > 0){
-    debtDisplay = "<span style='font-size:13px;color:#92400e;background:#fefce8;border:1px solid #fde68a;padding:4px 10px;border-radius:6px;display:inline-block;text-transform:none;font-weight:600;'>As Per Tax Slab</span><br><span style='font-size:20px;font-weight:700;color:var(--dark);'>&#8377;"+debtTax.toLocaleString('en-IN')+"</span>";
+    debtDisplay = "<span style='font-size:13px;color:#92400e;background:#fefce8;border:1px solid #fde68a;padding:4px 10px;border-radius:6px;display:inline-block;text-transform:none;font-weight:600;'>As Per Tax Slab</span><br><span style='font-size:20px;font-weight:700;color:var(--dark);'>&#8377;"+Math.round(debtTax).toLocaleString('en-IN')+"</span>";
   } else if(hasDebtST && debtTax === 0){
     debtDisplay = "<span style='font-size:13px;color:#92400e;background:#fefce8;border:1px solid #fde68a;padding:4px 10px;border-radius:6px;display:inline-block;text-transform:none;font-weight:600;'>As Per Tax Slab</span>";
   } else if(!hasDebtST && debtTax > 0){
-    debtDisplay = "<span style='font-size:20px;font-weight:700;color:var(--dark);'>&#8377;"+debtTax.toLocaleString('en-IN')+"</span>";
+    debtDisplay = "<span style='font-size:20px;font-weight:700;color:var(--dark);'>&#8377;"+Math.round(debtTax).toLocaleString('en-IN')+"</span>";
   } else {
     debtDisplay = "<span style='font-size:20px;font-weight:700;color:var(--dark);'>&#8377;0</span>";
   }
@@ -4424,19 +4424,19 @@ function updateRedemptionSummary(){
   summaryEl.innerHTML =
     "<div style='flex:1;padding:14px 20px;border-right:1px solid var(--border);'>" +
     "  <div style='font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;white-space:nowrap;'>Equity Tax Liability</div>" +
-    "  <div style='font-size:20px;font-weight:700;color:var(--dark);'>&#8377;"+equityTax.toLocaleString('en-IN')+"</div>" +
-    "  <div style='font-size:11px;color:var(--muted);margin-top:6px;font-weight:500;line-height:1.4;'>Short Term Tax Liability: &#8377;"+calc.equitySTTax.toLocaleString('en-IN')+"<br>Long Term Tax Liability: &#8377;"+calc.equityLTTax.toLocaleString('en-IN')+"</div>" +
+    "  <div style='font-size:20px;font-weight:700;color:var(--dark);'>&#8377;"+Math.round(equityTax).toLocaleString('en-IN')+"</div>" +
+    "  <div style='font-size:11px;color:var(--muted);margin-top:6px;font-weight:500;line-height:1.4;'>Short Term Tax Liability: &#8377;"+Math.round(calc.equitySTTax).toLocaleString('en-IN')+"<br>Long Term Tax Liability: &#8377;"+Math.round(calc.equityLTTax).toLocaleString('en-IN')+"</div>" +
     "</div>" +
     "<div style='flex:1;padding:14px 20px;'>" +
     "  <div style='font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;white-space:nowrap;'>Debt Tax Liability</div>" +
     "  <div>"+debtDisplay+"</div>" +
-    "  <div style='font-size:11px;color:var(--muted);margin-top:6px;font-weight:500;line-height:1.4;'>Short Term Tax Liability: "+debtSTText+"<br>Long Term Tax Liability: &#8377;"+debtTax.toLocaleString('en-IN')+"</div>" +
+    "  <div style='font-size:11px;color:var(--muted);margin-top:6px;font-weight:500;line-height:1.4;'>Short Term Tax Liability: "+debtSTText+"<br>Long Term Tax Liability: &#8377;"+Math.round(debtTax).toLocaleString('en-IN')+"</div>" +
     "</div>";
   if(chkLbl){
     var rs = getRedemptionState();
-    chkLbl.textContent = rs.includeExemption
-      ? "✓ ₹1.25 Lakh Exemption Included" + (rs.booked>0 ? " | Booked: "+fmtINR(String(rs.booked)) : "")
-      : "✗ ₹1.25 Lakh Exemption Excluded";
+    chkLbl.textContent = (rs.includeExemption
+      ? "✓ ₹1.25 Lakh Exemption Included"
+      : "✗ ₹1.25 Lakh Exemption Excluded") + (rs.booked>0 ? " | Booked: "+fmtINR(String(rs.booked)) : "");
   }
 }
 
@@ -4593,27 +4593,27 @@ function buildRedemptionPreview(){
 
   // Exemption info
   h += "<div style='margin-top:10px;padding:10px 14px;background:#eff6ff;border-left:3px solid #1a4a9c;border-radius:4px;font-size:12px;color:#1a4a9c;'>";
-  h += rs.includeExemption ? "&#10003; ₹1.25 Lakh Exemption Included"+(rs.booked>0?" | Booked Capital Gain: "+fmtINR(String(rs.booked)):"") : "&#10007; ₹1.25 Lakh Exemption Excluded";
+  h += (rs.includeExemption ? "&#10003; ₹1.25 Lakh Exemption Included" : "&#10007; ₹1.25 Lakh Exemption Excluded")+(rs.booked>0?" | Booked Capital Gain: "+fmtINR(String(rs.booked)):"");
   h += "</div>";
 
   // Tax summary
   h += "<div style='margin-top:14px;display:flex;gap:14px;'>";
   h += "<div style='flex:1;padding:16px 24px;background:#0d2b5e;border-radius:8px;color:#fff;'>";
   h += "  <div style='font-size:11px;letter-spacing:1.5px;text-transform:uppercase;opacity:0.8;margin-bottom:8px;font-weight:700;'>Equity Tax Liability</div>";
-  h += "  <div style='font-size:22px;font-weight:800;margin-bottom:10px;'>&#8377;"+equityTax.toLocaleString('en-IN')+"</div>";
+  h += "  <div style='font-size:22px;font-weight:800;margin-bottom:10px;'>&#8377;"+Math.round(equityTax).toLocaleString('en-IN')+"</div>";
   h += "  <div style='font-size:12.5px;opacity:0.9;font-weight:500;line-height:1.6;'>";
-  h += "    Short Term Tax Liability: &#8377;"+calc2.equitySTTax.toLocaleString('en-IN')+"<br>";
-  h += "    Long Term Tax Liability: &#8377;"+calc2.equityLTTax.toLocaleString('en-IN')+"";
+  h += "    Short Term Tax Liability: &#8377;"+Math.round(calc2.equitySTTax).toLocaleString('en-IN')+"<br>";
+  h += "    Long Term Tax Liability: &#8377;"+Math.round(calc2.equityLTTax).toLocaleString('en-IN')+"";
   h += "  </div>";
   h += "</div>";
 
   var prevDebtDisp = "";
   if(hasDebtST && debtTax > 0){
-    prevDebtDisp = "<span style='font-size:12.5px;color:#92400e;background:#fefce8;border:1px solid #fde68a;padding:2px 8px;border-radius:4px;display:inline-block;text-transform:none;font-weight:600;margin-bottom:6px;'>As Per Tax Slab</span><br>&#8377;"+debtTax.toLocaleString('en-IN');
+    prevDebtDisp = "<span style='font-size:12.5px;color:#92400e;background:#fefce8;border:1px solid #fde68a;padding:2px 8px;border-radius:4px;display:inline-block;text-transform:none;font-weight:600;margin-bottom:6px;'>As Per Tax Slab</span><br>&#8377;"+Math.round(debtTax).toLocaleString('en-IN');
   } else if(hasDebtST && debtTax === 0){
     prevDebtDisp = "<span style='font-size:12.5px;color:#92400e;background:#fefce8;border:1px solid #fde68a;padding:2px 8px;border-radius:4px;display:inline-block;text-transform:none;font-weight:600;'>As Per Tax Slab</span>";
   } else if(!hasDebtST && debtTax > 0){
-    prevDebtDisp = "&#8377;"+debtTax.toLocaleString('en-IN');
+    prevDebtDisp = "&#8377;"+Math.round(debtTax).toLocaleString('en-IN');
   } else {
     prevDebtDisp = "&#8377;0";
   }
@@ -4624,7 +4624,7 @@ function buildRedemptionPreview(){
   h += "  <div style='font-size:22px;font-weight:800;margin-bottom:10px;'>"+prevDebtDisp+"</div>";
   h += "  <div style='font-size:12.5px;opacity:0.9;font-weight:500;line-height:1.6;'>";
   h += "    Short Term Tax Liability: "+prevDebtSTText+"<br>";
-  h += "    Long Term Tax Liability: &#8377;"+debtTax.toLocaleString('en-IN')+"";
+  h += "    Long Term Tax Liability: &#8377;"+Math.round(debtTax).toLocaleString('en-IN')+"";
   h += "  </div>";
   h += "</div>";
   h += "</div>";
@@ -4759,8 +4759,8 @@ function openNext(){
       var totalRow = ["", "TOTAL", totalAmt, totalST, totalLT, ""];
       extras.push(["Exemption:", rs.includeExemption ? "Included (Rs 1,25,000)" : "Excluded"]);
       if(rs.booked) extras.push(["Booked Capital Gain:", pNum(S.redemptionBookedGain)]);
-      extras.push(["Equity Tax Liability:", calc.equityTax]);
-      extras.push(["Debt Tax Liability:", calc.debtLTTax]);
+      extras.push(["Equity Tax Liability:", Math.round(calc.equityTax)]);
+      extras.push(["Debt Tax Liability:", Math.round(calc.debtLTTax)]);
       if(calc.hasDebtST) extras.push(["Note:", "Debt Short Term: As Per Tax Slab"]);
       if(calc.netEquityST < 0 && calc.netEquityLT > 0) extras.push(["Adjustment:", "ST Loss of "+Math.abs(calc.netEquityST)+" adjusted against LT Gain. Net LT = "+calc.adjustedLT]);
       if(S.bankDetailsRedemption && S.bankDetailsRedemption.length > 0){
@@ -4911,25 +4911,25 @@ function openNext(){
     h += "<tr><td colspan='3' style='background:#0047AB;color:#fff;padding:9px 24px 9px 12px;font-size:10px;font-weight:700;text-transform:uppercase;text-align:right;'>TOTAL</td><td style='background:#0047AB;color:#fff;padding:9px 12px;font-size:12px;font-weight:700;'>"+fmtINRhtml(String(totalAmt2))+"</td><td style='background:#0047AB;color:#fff;padding:9px 12px;font-size:12px;font-weight:700;'>"+fmtINRhtml(String(totalST))+"</td><td style='background:#0047AB;color:#fff;padding:9px 12px;font-size:12px;font-weight:700;'>"+fmtINRhtml(String(totalLT))+"</td><td style='background:#0047AB;padding:9px 12px;'></td></tr>";
     h += "</tbody></table>";
     h += "<div style='margin-top:10px;padding:8px 12px;background:#eff6ff;border-left:3px solid #1a4a9c;border-radius:4px;font-size:11.5px;color:#1a4a9c;'>";
-    h += rs.includeExemption ? "&#10003; &#8377;1.25 Lakh Exemption Included"+(rs.booked>0?" &nbsp;|&nbsp; Booked Capital Gain: "+fmtINRhtml(String(rs.booked)):"") : "&#10007; &#8377;1.25 Lakh Exemption Excluded";
+    h += (rs.includeExemption ? "&#10003; &#8377;1.25 Lakh Exemption Included" : "&#10007; &#8377;1.25 Lakh Exemption Excluded")+(rs.booked>0?" &nbsp;|&nbsp; Booked Capital Gain: "+fmtINRhtml(String(rs.booked)):"");
     h += "</div>";
     h += "<div style='margin-top:14px;display:flex;gap:14px;'>";
     h += "<div style='flex:1;padding:16px 24px;background:#0d2b5e;border-radius:8px;color:#fff;'>";
     h += "  <div style='font-size:11px;letter-spacing:1.5px;text-transform:uppercase;opacity:0.8;margin-bottom:8px;font-weight:700;'>Equity Tax Liability</div>";
-    h += "  <div style='font-size:22px;font-weight:800;margin-bottom:10px;'>&#8377;"+equityTax.toLocaleString('en-IN')+"</div>";
+    h += "  <div style='font-size:22px;font-weight:800;margin-bottom:10px;'>&#8377;"+Math.round(equityTax).toLocaleString('en-IN')+"</div>";
     h += "  <div style='font-size:12.5px;opacity:0.9;font-weight:500;line-height:1.6;'>";
-    h += "    Short Term Tax Liability: &#8377;"+calc3.equitySTTax.toLocaleString('en-IN')+"<br>";
-    h += "    Long Term Tax Liability: &#8377;"+calc3.equityLTTax.toLocaleString('en-IN')+"";
+    h += "    Short Term Tax Liability: &#8377;"+Math.round(calc3.equitySTTax).toLocaleString('en-IN')+"<br>";
+    h += "    Long Term Tax Liability: &#8377;"+Math.round(calc3.equityLTTax).toLocaleString('en-IN')+"";
     h += "  </div>";
     h += "</div>";
 
     var secDebtDisp = "";
     if(hasDebtST && debtTax > 0){
-      secDebtDisp = "<span style='font-size:12.5px;color:#92400e;background:#fefce8;border:1px solid #fde68a;padding:2px 8px;border-radius:4px;display:inline-block;text-transform:none;font-weight:600;margin-bottom:6px;'>As Per Tax Slab</span><br>&#8377;"+debtTax.toLocaleString('en-IN');
+      secDebtDisp = "<span style='font-size:12.5px;color:#92400e;background:#fefce8;border:1px solid #fde68a;padding:2px 8px;border-radius:4px;display:inline-block;text-transform:none;font-weight:600;margin-bottom:6px;'>As Per Tax Slab</span><br>&#8377;"+Math.round(debtTax).toLocaleString('en-IN');
     } else if(hasDebtST && debtTax === 0){
       secDebtDisp = "<span style='font-size:12.5px;color:#92400e;background:#fefce8;border:1px solid #fde68a;padding:2px 8px;border-radius:4px;display:inline-block;text-transform:none;font-weight:600;'>As Per Tax Slab</span>";
     } else if(!hasDebtST && debtTax > 0){
-      secDebtDisp = "&#8377;"+debtTax.toLocaleString('en-IN');
+      secDebtDisp = "&#8377;"+Math.round(debtTax).toLocaleString('en-IN');
     } else {
       secDebtDisp = "&#8377;0";
     }
@@ -4940,7 +4940,7 @@ function openNext(){
     h += "  <div style='font-size:22px;font-weight:800;margin-bottom:10px;'>"+secDebtDisp+"</div>";
     h += "  <div style='font-size:12.5px;opacity:0.9;font-weight:500;line-height:1.6;'>";
     h += "    Short Term Tax Liability: "+secDebtSTText+"<br>";
-    h += "    Long Term Tax Liability: &#8377;"+debtTax.toLocaleString('en-IN')+"";
+    h += "    Long Term Tax Liability: &#8377;"+Math.round(debtTax).toLocaleString('en-IN')+"";
     h += "  </div>";
     h += "</div>";
     h += "</div>";
